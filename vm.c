@@ -322,6 +322,9 @@ copyuvm(pde_t *pgdir, uint sz)
 
   if((d = setupkvm()) == 0)
     return 0;
+  
+  // copies user text and data (code) from the lower user space
+  // (i.e., global/static variables) up to sz
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
       panic("copyuvm: pte should exist");
@@ -335,6 +338,26 @@ copyuvm(pde_t *pgdir, uint sz)
     if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0)
       goto bad;
   }
+
+ 
+  // changed cs153 lab 2 (TODO 4)
+  // now we copy over the stack that we created at the top of the
+  // user space just below the KERNBASE
+  for(i = STACKBASE - myproc()->numStackPages*PGSIZE; i < STACKBASE; i += PGSIZE){
+    if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
+      panic("copyuvm: pte should exist");
+    if(!(*pte & PTE_P))
+      panic("copyuvm: page not present");
+    pa = PTE_ADDR(*pte);
+    flags = PTE_FLAGS(*pte);
+    if((mem = kalloc()) == 0)
+      goto bad;
+    memmove(mem, (char*)P2V(pa), PGSIZE);
+    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0)
+      goto bad;
+  }
+
+
   return d;
 
 bad:

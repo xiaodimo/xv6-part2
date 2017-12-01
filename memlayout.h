@@ -8,6 +8,9 @@
 #define KERNBASE 0x80000000         // First kernel virtual address
 #define KERNLINK (KERNBASE+EXTMEM)  // Address where kernel is linked
 
+#define STACKBASE 0x7FFFFFFC // bottom of stack, below KERNBASE, so it's KERNBASE - 4 Bytes
+// it's where we start building the stack into the user space, which grows down toward VA 0
+
 #define V2P(a) (((uint) (a)) - KERNBASE)
 #define P2V(a) (((void *) (a)) + KERNBASE)
 

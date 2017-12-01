@@ -60,13 +60,41 @@ exec(char *path, char **argv)
   end_op();
   ip = 0;
 
+
+
+/*
+  // below is old notes for way xv6 use to run:
   // Allocate two pages at the next page boundary.
   // Make the first inaccessible.  Use the second as the user stack.
-  sz = PGROUNDUP(sz);
+  sz = PGROUNDUP(sz); // round up user code to be a full page
   if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)
     goto bad;
   clearpteu(pgdir, (char*)(sz - 2*PGSIZE));
   sp = sz;
+*/
+
+  // changed for cs153 lab2
+ 
+  sz = PGROUNDUP(sz); // round up user code to be a full page
+
+  // below creates a buffer above the code/text so that we can't grow into 
+  // the code of the program
+  if((sz = allocuvm(pgdir, sz, sz + PGSIZE)) == 0)
+    goto bad;
+  clearpteu(pgdir, (char*)(sz - PGSIZE));
+
+
+  sp = STACKBASE; // make stack pointer point to just below the KERNBASE to start
+
+  // now create the first page for the stack
+  if((allocuvm(pgdir, sp - PGSIZE, sp)) == 0)
+    goto bad;
+ 
+  // changed cs153 lab 2
+  curproc->numStackPages = 1; // says we created a page for the stack
+
+
+
 
   // Push argument strings, prepare rest of stack in ustack.
   for(argc = 0; argv[argc]; argc++) {
