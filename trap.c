@@ -13,7 +13,11 @@ struct gatedesc idt[256];
 extern uint vectors[];  // in vectors.S: array of 256 entry pointers
 struct spinlock tickslock;
 uint ticks;
+
+/////////////////////
+//changed cs153 lab 2
 uint sp;
+pde_t *pgdir;
 
 void
 tvinit(void)
@@ -38,6 +42,9 @@ void
 trap(struct trapframe *tf)
 {
 
+  //changed cs 153 lab 2
+  //cprintf("\n\n//////////////////////////////////////////////////\n");
+  //cprintf("Enter trap() in trap.c...\n\n");
 
   if(tf->trapno == T_SYSCALL){
     if(myproc()->killed)
@@ -81,30 +88,49 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
 
+  //////////////////////
   // changed cs153 lab 2
   case T_PGFLT:
+    
+    //cprintf("\n\nrcr3(): %d\n\n", rcr3());    
 
-    cprintf("\n\nsp: %d\n", sp);
-    //uint sp;
+    //*pgdir = rcr3(); // gets the address of the page directory
+
+    cprintf("\n\nEntered trap T_PGFLT...\n\n");
+
+    cprintf("tr->esp: %d\n\n", tf->esp);
+
+    cprintf("sp before assignment: %d\n\n", sp);
+    
     //sp = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE);
     //sp = STACKBASE - (myproc()->numStackPages*PGSIZE + 4);
-    sp = STACKBASE - myproc()->numStackPages*PGSIZE + 4;
+    //sp = STACKBASE - myproc()->numStackPages*PGSIZE + 4;
+    sp = tf->esp; // gets the stack pointer from the trap frame    
 
-    cprintf("myproc(): %d\n", myproc());
 
-    cprintf("rcr2(): %d\n", rcr2());
-    cprintf("STACKBASE: %d\n", STACKBASE);
-    cprintf("myproc()->numStackPages: %d\n", myproc()->numStackPages);
-    cprintf("PGSIZE: %d\n", PGSIZE);
-    cprintf("myproc()->numStackPages*PGSIZE + 4: %d\n", myproc()->numStackPages*PGSIZE + 4);
-    cprintf("sp: %d\n\n", sp);
+    //cprintf("STACKBASE: %d\n", STACKBASE);
+    cprintf("sp (after assignment): %d\n", sp);
+    cprintf("rcr2(): %d\n\n", rcr2());
+    
+    //cprintf("myproc(): %d\n", myproc());
+    //cprintf("STACKBASE: %d\n", STACKBASE);
+    //cprintf("myproc()->numStackPages: %d\n", myproc()->numStackPages);
+    //cprintf("myproc()->numStackPages*PGSIZE + 4: %d\n\n", myproc()->numStackPages*PGSIZE + 4);
 
+    cprintf("myproc()->pgdir: %d\n", myproc()->pgdir);
+    
+    
     if(rcr2() < sp) {
       if((allocuvm(myproc()->pgdir, sp - PGSIZE, sp)) == 0) {
         cprintf("\n\nnot supposed to be here...\n\n");
         exit();
       }
     }
+
+    cprintf("\n\nafter if statement for allocuvm in trap(), about to leave trap...\n\n");
+    
+    break;
+  //////////////////////
   
 
   //PAGEBREAK: 13

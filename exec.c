@@ -10,6 +10,15 @@
 int
 exec(char *path, char **argv)
 {
+
+  //changed cs 153 lab 2
+  cprintf("\n\n//////////////////////////////////////////////////\n");
+  cprintf("Enter exec() in exec.c...\n\n");
+
+  // used to see if myproc() had a pgdir, but it comes out negative number
+  //cprintf("\n\nmyproc()->pgdir: %d\n\n", myproc()->pgdir);
+
+
   char *s, *last;
   int i, off;
   uint argc, sz, sp, ustack[3+MAXARG+1];
@@ -73,9 +82,19 @@ exec(char *path, char **argv)
   sp = sz;
 */
 
+  /////////////////////////
   // changed for cs153 lab2
- 
+  
+  sp = 0;
+  
+  cprintf("\n\nsz before PGROUNDUP and buffer/guard created, only program code loaded...\n");
+  cprintf("sz: %d\n", sz);
+  
+
   sz = PGROUNDUP(sz); // round up user code to be a full page
+
+  cprintf("\n\nafter sz assignment...\n");
+  cprintf("sz: %d\n", sz);
 
   // below creates a buffer above the code/text so that we can't grow into 
   // the code of the program
@@ -84,16 +103,33 @@ exec(char *path, char **argv)
   clearpteu(pgdir, (char*)(sz - PGSIZE));
 
 
+
+  ///////////////////////
+  // changed cs 153 lab 2
+  cprintf("\n\nafter allocuvm for sz, before sp assignment...\n");
+  cprintf("sz: %d\n", sz);
+  cprintf("sp: %d\n", sp);
+  cprintf("STACKBASE: %d\n", STACKBASE);
+
   sp = STACKBASE; // make stack pointer point to just below the KERNBASE to start
+
+  cprintf("\n\nafter sp assignment...\n");
+  cprintf("sp: %d\n", sp);
+  cprintf("STACKBASE: %d\n", STACKBASE);
+  cprintf("sp - PGSIZE: %d\n", sp - PGSIZE);
 
   // now create the first page for the stack
   if((allocuvm(pgdir, sp - PGSIZE, sp)) == 0)
     goto bad;
  
+
   // changed cs153 lab 2
   curproc->numStackPages = 1; // says we created a page for the stack
 
-
+  cprintf("\n\nafter allocuvm for sp and curproc->numStackPages...\n");
+  cprintf("sp: %d\n", sp);
+  cprintf("STACKBASE: %d\n", STACKBASE);
+  cprintf("curproc->numStackPages: %d\n", curproc->numStackPages);
 
 
   // Push argument strings, prepare rest of stack in ustack.
@@ -107,6 +143,7 @@ exec(char *path, char **argv)
   }
   ustack[3+argc] = 0;
 
+  // ****************************************** CHECK BELOW CODE ******************** //
   ustack[0] = 0xffffffff;  // fake return PC
   ustack[1] = argc;
   ustack[2] = sp - (argc+1)*4;  // argv pointer
@@ -120,6 +157,14 @@ exec(char *path, char **argv)
     if(*s == '/')
       last = s+1;
   safestrcpy(curproc->name, last, sizeof(curproc->name));
+
+
+  ///////////////////////
+  // changed cs 153 lab 2
+  cprintf("\n\nsz: %d\n", sz);
+  cprintf("sp: %d\n\n", sp);
+
+
 
   // Commit to the user image.
   oldpgdir = curproc->pgdir;

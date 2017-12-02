@@ -35,6 +35,11 @@ seginit(void)
 static pte_t *
 walkpgdir(pde_t *pgdir, const void *va, int alloc)
 {
+
+  //changed cs 153 lab 2
+  //cprintf("\n\n//////////////////////////////////////////////////\n");
+  //cprintf("Enter walkpgdir() in vm.c...\n\n");
+
   pde_t *pde;
   pte_t *pgtab;
 
@@ -60,6 +65,10 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
 int
 mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
 {
+  //changed cs 153 lab 2
+  //cprintf("\n\n//////////////////////////////////////////////////\n");
+  //cprintf("Enter mappages() in vm.c...\n\n");
+
   char *a, *last;
   pte_t *pte;
 
@@ -221,6 +230,10 @@ loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
 int
 allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
+  //changed cs 153 lab 2
+  cprintf("\n\n//////////////////////////////////////////////////\n");
+  cprintf("Enter allocuvm() in vm.c...\n\n");
+
   char *mem;
   uint a;
 
@@ -255,6 +268,10 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 int
 deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
+  //changed cs 153 lab 2
+  cprintf("\n\n//////////////////////////////////////////////////\n");
+  cprintf("Enter deallocuvm() in vm.c...\n\n");
+
   pte_t *pte;
   uint a, pa;
 
@@ -315,6 +332,10 @@ clearpteu(pde_t *pgdir, char *uva)
 pde_t*
 copyuvm(pde_t *pgdir, uint sz)
 {
+  //changed cs 153 lab 2
+  cprintf("\n\n//////////////////////////////////////////////////\n");
+  cprintf("Enter copyuvm() in vm.c...\n\n");
+
   pde_t *d;
   pte_t *pte;
   uint pa, i, flags;
@@ -322,6 +343,10 @@ copyuvm(pde_t *pgdir, uint sz)
 
   if((d = setupkvm()) == 0)
     return 0;
+
+
+  cprintf("\n\nAbove original copy for loop for 0 to sz in VA...\n\n");
+
   
   // copies user text and data (code) from the lower user space
   // (i.e., global/static variables) up to sz
@@ -332,34 +357,42 @@ copyuvm(pde_t *pgdir, uint sz)
       panic("copyuvm: page not present");
     pa = PTE_ADDR(*pte);
     flags = PTE_FLAGS(*pte);
-    if((mem = kalloc()) == 0)
+    if((mem = kalloc()) == 0) {
+      cprintf("about to 'goto bad', original copy loop\n");
       goto bad;
+    }
     memmove(mem, (char*)P2V(pa), PGSIZE);
-    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0)
+    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
+      cprintf("about to 'goto bad', original copy loop\n");
       goto bad;
+    }
   }
 
+  cprintf("End original copy for loop for 0 to sz in VA...\n\n");
 
 
 
- 
+  ///////////////////////////////
   // changed cs153 lab 2 (TODO 4)
 
-//  cprintf("i: %d\n", i);
-//  cprintf("STACKBASE: %d\n", STACKBASE);  
-//  cprintf("PGSIZE: %d\n", PGSIZE);
-//  cprintf("STACKBASE-myproc()->numStackPages*PGSIZE: %d\n\n", STACKBASE-myproc()->numStackPages*PGSIZE);
+  //cprintf("i: %d\n", i);
+  //cprintf("STACKBASE: %d\n", STACKBASE);  
+  //cprintf("PGSIZE: %d\n", PGSIZE);
+  //cprintf("STACKBASE-myproc()->numStackPages*PGSIZE: %d\n\n", STACKBASE-myproc()->numStackPages*PGSIZE);
+
+  cprintf("\n\nAbove new copy for loop for stack...\n\n");
 
   // now we copy over the stack that we created at the top of the
   // user space just below the KERNBASE
   //for(i = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE); i < STACKBASE; i += PGSIZE){
-
   for(i = (STACKBASE - myproc()->numStackPages*PGSIZE + 4); i < STACKBASE; i += PGSIZE){
 
-//    cprintf("i: %d\n", i);
-//    cprintf("STACKBASE: %d\n", STACKBASE);  
-//    cprintf("PGSIZE: %d\n", PGSIZE);
-//    cprintf("STACKBASE-myproc()->numStackPages*PGSIZE: %d\n\n", STACKBASE-myproc()->numStackPages*PGSIZE);
+    cprintf("inside coy for loop for stack...\n");
+    
+    //cprintf("i: %d\n", i);
+    //cprintf("STACKBASE: %d\n", STACKBASE);  
+    //cprintf("PGSIZE: %d\n", PGSIZE);
+    //cprintf("STACKBASE-myproc()->numStackPages*PGSIZE: %d\n\n", STACKBASE-myproc()->numStackPages*PGSIZE);
 
 
 
@@ -367,15 +400,26 @@ copyuvm(pde_t *pgdir, uint sz)
       panic("copyuvm2: pte should exist");
     if(!(*pte & PTE_P))
       panic("copyuvm2: page not present");
+
     pa = PTE_ADDR(*pte);
     flags = PTE_FLAGS(*pte);
-    if((mem = kalloc()) == 0)
+
+    if((mem = kalloc()) == 0) {
+      cprintf("about to 'goto bad' mem=kalloc() if statement in copy for loop for stack...\n");
       goto bad;
+    }
+
     memmove(mem, (char*)P2V(pa), PGSIZE);
-    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0)
+
+    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
+      cprintf("about to 'goto bad' mappages if statement in copy for loop for stack...\n");
       goto bad;
+    }
+
   }
 
+  cprintf("end new copy for loop for stack...\n");
+  cprintf("about to leave copyuvm...\n\n");
 
   return d;
 
