@@ -231,8 +231,8 @@ int
 allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
   //changed cs 153 lab 2
-  cprintf("\n\n//////////////////////////////////////////////////\n");
-  cprintf("Enter allocuvm() in vm.c...\n\n");
+  //cprintf("\n\n//////////////////////////////////////////////////\n");
+  //cprintf("Enter allocuvm() in vm.c...\n\n");
 
   char *mem;
   uint a;
@@ -269,8 +269,8 @@ int
 deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
   //changed cs 153 lab 2
-  cprintf("\n\n//////////////////////////////////////////////////\n");
-  cprintf("Enter deallocuvm() in vm.c...\n\n");
+  //cprintf("\n\n//////////////////////////////////////////////////\n");
+  //cprintf("Enter deallocuvm() in vm.c...\n\n");
 
   pte_t *pte;
   uint a, pa;
@@ -333,8 +333,8 @@ pde_t*
 copyuvm(pde_t *pgdir, uint sz)
 {
   //changed cs 153 lab 2
-  cprintf("\n\n//////////////////////////////////////////////////\n");
-  cprintf("Enter copyuvm() in vm.c...\n\n");
+  //cprintf("\n\n//////////////////////////////////////////////////\n");
+  //cprintf("Enter copyuvm() in vm.c...\n\n");
 
   pde_t *d;
   pte_t *pte;
@@ -345,7 +345,7 @@ copyuvm(pde_t *pgdir, uint sz)
     return 0;
 
 
-  cprintf("\n\nAbove original copy for loop for 0 to sz in VA...\n\n");
+  //cprintf("\n\nAbove original copy for loop for 0 to sz in VA...\n\n");
 
   
   // copies user text and data (code) from the lower user space
@@ -358,17 +358,17 @@ copyuvm(pde_t *pgdir, uint sz)
     pa = PTE_ADDR(*pte);
     flags = PTE_FLAGS(*pte);
     if((mem = kalloc()) == 0) {
-      cprintf("about to 'goto bad', original copy loop\n");
+      //cprintf("about to 'goto bad', original copy loop\n");
       goto bad;
     }
     memmove(mem, (char*)P2V(pa), PGSIZE);
     if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
-      cprintf("about to 'goto bad', original copy loop\n");
+      //cprintf("about to 'goto bad', original copy loop\n");
       goto bad;
     }
   }
 
-  cprintf("End original copy for loop for 0 to sz in VA...\n\n");
+  //cprintf("End original copy for loop for 0 to sz in VA...\n\n");
 
 
 
@@ -380,14 +380,14 @@ copyuvm(pde_t *pgdir, uint sz)
   //cprintf("PGSIZE: %d\n", PGSIZE);
   //cprintf("STACKBASE-myproc()->numStackPages*PGSIZE: %d\n\n", STACKBASE-myproc()->numStackPages*PGSIZE);
 
-  cprintf("\n\nAbove new copy for loop for stack...\n\n");
+  //cprintf("\n\nAbove new copy for loop for stack...\n\n");
 
   // now we copy over the stack that we created at the top of the
   // user space just below the KERNBASE
   //for(i = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE); i < STACKBASE; i += PGSIZE){
   for(i = (STACKBASE - myproc()->numStackPages*PGSIZE + 4); i < STACKBASE; i += PGSIZE){
 
-    cprintf("inside coy for loop for stack...\n");
+    //cprintf("inside coy for loop for stack...\n");
     
     //cprintf("i: %d\n", i);
     //cprintf("STACKBASE: %d\n", STACKBASE);  

@@ -96,11 +96,11 @@ trap(struct trapframe *tf)
 
     //*pgdir = rcr3(); // gets the address of the page directory
 
-    cprintf("\n\nEntered trap T_PGFLT...\n\n");
+    //cprintf("\n\nEntered trap T_PGFLT...\n\n");
 
-    cprintf("tr->esp: %d\n\n", tf->esp);
+    //cprintf("tr->esp: %d\n\n", tf->esp);
 
-    cprintf("sp before assignment: %d\n\n", sp);
+    //cprintf("sp before assignment: %d\n\n", sp);
     
     //sp = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE);
     //sp = STACKBASE - (myproc()->numStackPages*PGSIZE + 4);
@@ -109,25 +109,25 @@ trap(struct trapframe *tf)
 
 
     //cprintf("STACKBASE: %d\n", STACKBASE);
-    cprintf("sp (after assignment): %d\n", sp);
-    cprintf("rcr2(): %d\n\n", rcr2());
+    //cprintf("sp (after assignment): %d\n", sp);
+    //cprintf("rcr2(): %d\n\n", rcr2());
     
     //cprintf("myproc(): %d\n", myproc());
     //cprintf("STACKBASE: %d\n", STACKBASE);
     //cprintf("myproc()->numStackPages: %d\n", myproc()->numStackPages);
     //cprintf("myproc()->numStackPages*PGSIZE + 4: %d\n\n", myproc()->numStackPages*PGSIZE + 4);
 
-    cprintf("myproc()->pgdir: %d\n", myproc()->pgdir);
+    //cprintf("myproc()->pgdir: %d\n", myproc()->pgdir);
     
     
     if(rcr2() < sp) {
       if((allocuvm(myproc()->pgdir, sp - PGSIZE, sp)) == 0) {
-        cprintf("\n\nnot supposed to be here...\n\n");
+        cprintf("\n\nno more memory to allocate, exiting program...\n\n");
         exit();
       }
     }
 
-    cprintf("\n\nafter if statement for allocuvm in trap(), about to leave trap...\n\n");
+    //cprintf("\n\nafter if statement for allocuvm in trap(), about to leave trap...\n\n");
     
     break;
   //////////////////////
