@@ -339,15 +339,33 @@ copyuvm(pde_t *pgdir, uint sz)
       goto bad;
   }
 
+
+
+
  
   // changed cs153 lab 2 (TODO 4)
+
+//  cprintf("i: %d\n", i);
+//  cprintf("STACKBASE: %d\n", STACKBASE);  
+//  cprintf("PGSIZE: %d\n", PGSIZE);
+//  cprintf("STACKBASE-myproc()->numStackPages*PGSIZE: %d\n\n", STACKBASE-myproc()->numStackPages*PGSIZE);
+
   // now we copy over the stack that we created at the top of the
   // user space just below the KERNBASE
-  for(i = STACKBASE - myproc()->numStackPages*PGSIZE; i < STACKBASE; i += PGSIZE){
+  for(i = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE); i < STACKBASE; i += PGSIZE){
+
+
+//    cprintf("i: %d\n", i);
+//    cprintf("STACKBASE: %d\n", STACKBASE);  
+//    cprintf("PGSIZE: %d\n", PGSIZE);
+//    cprintf("STACKBASE-myproc()->numStackPages*PGSIZE: %d\n\n", STACKBASE-myproc()->numStackPages*PGSIZE);
+
+
+
     if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
-      panic("copyuvm: pte should exist");
+      panic("copyuvm2: pte should exist");
     if(!(*pte & PTE_P))
-      panic("copyuvm: page not present");
+      panic("copyuvm2: page not present");
     pa = PTE_ADDR(*pte);
     flags = PTE_FLAGS(*pte);
     if((mem = kalloc()) == 0)
