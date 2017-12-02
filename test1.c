@@ -2,6 +2,8 @@
 #include "stat.h"
 #include "user.h"
 
+// sample test code for part 1 in lab 2
+
 int test(int n)
 {
    test(n+1);

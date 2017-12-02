@@ -39,8 +39,6 @@ trap(struct trapframe *tf)
 {
 
 
-
-
   if(tf->trapno == T_SYSCALL){
     if(myproc()->killed)
       exit();
@@ -86,17 +84,28 @@ trap(struct trapframe *tf)
   // changed cs153 lab 2
   case T_PGFLT:
 
+    cprintf("\n\nsp: %d\n", sp);
     //uint sp;
-    sp = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE);
+    //sp = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE);
+    //sp = STACKBASE - (myproc()->numStackPages*PGSIZE + 4);
+    sp = STACKBASE - myproc()->numStackPages*PGSIZE + 4;
 
-    cprintf("\n\nrcr2(): %d\n\n", rcr2());
+    cprintf("myproc(): %d\n", myproc());
+
+    cprintf("rcr2(): %d\n", rcr2());
+    cprintf("STACKBASE: %d\n", STACKBASE);
+    cprintf("myproc()->numStackPages: %d\n", myproc()->numStackPages);
+    cprintf("PGSIZE: %d\n", PGSIZE);
+    cprintf("myproc()->numStackPages*PGSIZE + 4: %d\n", myproc()->numStackPages*PGSIZE + 4);
+    cprintf("sp: %d\n\n", sp);
+
     if(rcr2() < sp) {
-      if((allocuvm(pgdir, sp - PGSIZE, sp)) == 0) {
+      if((allocuvm(myproc()->pgdir, sp - PGSIZE, sp)) == 0) {
         cprintf("\n\nnot supposed to be here...\n\n");
         exit();
       }
     }
-  break;
+  
 
   //PAGEBREAK: 13
   default:
