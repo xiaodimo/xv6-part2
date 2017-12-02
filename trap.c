@@ -13,6 +13,7 @@ struct gatedesc idt[256];
 extern uint vectors[];  // in vectors.S: array of 256 entry pointers
 struct spinlock tickslock;
 uint ticks;
+uint sp;
 
 void
 tvinit(void)
@@ -36,6 +37,10 @@ idtinit(void)
 void
 trap(struct trapframe *tf)
 {
+
+
+
+
   if(tf->trapno == T_SYSCALL){
     if(myproc()->killed)
       exit();
@@ -77,6 +82,21 @@ trap(struct trapframe *tf)
             cpuid(), tf->cs, tf->eip);
     lapiceoi();
     break;
+
+  // changed cs153 lab 2
+  case T_PGFLT:
+
+    //uint sp;
+    sp = PGROUNDUP(STACKBASE - myproc()->numStackPages*PGSIZE);
+
+    cprintf("\n\nrcr2(): %d\n\n", rcr2());
+    if(rcr2() < sp) {
+      if((allocuvm(pgdir, sp - PGSIZE, sp)) == 0) {
+        cprintf("\n\nnot supposed to be here...\n\n");
+        exit();
+      }
+    }
+  break;
 
   //PAGEBREAK: 13
   default:
