@@ -246,13 +246,13 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   for(; a < newsz; a += PGSIZE){
     mem = kalloc();
     if(mem == 0){
-      cprintf("allocuvm out of memory\n");
+      cprintf("\nallocuvm out of memory\n");
       deallocuvm(pgdir, newsz, oldsz);
       return 0;
     }
     memset(mem, 0, PGSIZE);
     if(mappages(pgdir, (char*)a, PGSIZE, V2P(mem), PTE_W|PTE_U) < 0){
-      cprintf("allocuvm out of memory (2)\n");
+      cprintf("\nallocuvm out of memory (2)\n");
       deallocuvm(pgdir, newsz, oldsz);
       kfree(mem);
       return 0;
@@ -405,21 +405,21 @@ copyuvm(pde_t *pgdir, uint sz)
     flags = PTE_FLAGS(*pte);
 
     if((mem = kalloc()) == 0) {
-      cprintf("about to 'goto bad' mem=kalloc() if statement in copy for loop for stack...\n");
+      //cprintf("about to 'goto bad' mem=kalloc() if statement in copy for loop for stack...\n");
       goto bad;
     }
 
     memmove(mem, (char*)P2V(pa), PGSIZE);
 
     if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
-      cprintf("about to 'goto bad' mappages if statement in copy for loop for stack...\n");
+      //cprintf("about to 'goto bad' mappages if statement in copy for loop for stack...\n");
       goto bad;
     }
 
   }
 
-  cprintf("end new copy for loop for stack...\n");
-  cprintf("about to leave copyuvm...\n\n");
+  //cprintf("end new copy for loop for stack...\n");
+  //cprintf("about to leave copyuvm...\n\n");
 
   return d;
 
