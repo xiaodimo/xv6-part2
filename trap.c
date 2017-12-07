@@ -15,7 +15,7 @@ struct spinlock tickslock;
 uint ticks;
 
 /////////////////////
-//changed cs153 lab 2
+//cs 153 lab 2
 uint sp;
 pde_t *pgdir;
 
@@ -42,7 +42,7 @@ void
 trap(struct trapframe *tf)
 {
 
-  //changed cs 153 lab 2
+  //cs 153 lab 2
   //cprintf("\n\n//////////////////////////////////////////////////\n");
   //cprintf("Enter trap() in trap.c...\n\n");
 
@@ -89,7 +89,7 @@ trap(struct trapframe *tf)
     break;
 
   //////////////////////
-  // changed cs153 lab 2
+  //cs 153 lab 2
   case T_PGFLT:
     
     //cprintf("\n\nrcr3(): %d\n\n", rcr3());    

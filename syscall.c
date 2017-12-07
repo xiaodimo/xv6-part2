@@ -19,7 +19,7 @@ fetchint(uint addr, int *ip)
 {
   // struct proc *curproc = myproc();
 
-//changed for cs153 lab 2 (TODO 3)
+//cs 153 lab 2 (TODO 3)
 //this checked for out of bounds calls of user space 
 //  if(addr >= curproc->sz || addr+4 > curproc->sz)
 //    return -1;
@@ -36,13 +36,13 @@ fetchstr(uint addr, char **pp)
   char *s, *ep;
   //struct proc *curproc = myproc();
 
-// changed cs153 lab 2 (TODO 3)
+//cs 153 lab 2 (TODO 3)
 //  if(addr >= curproc->sz)
 //    return -1;
 
   *pp = (char*)addr;
 
-// changed cs153 lab 2 (TODO 3)
+//cs 153 lab 2 (TODO 3)
 //  ep = (char*)curproc->sz;
   ep = (char*)STACKBASE;
 
@@ -72,7 +72,7 @@ argptr(int n, char **pp, int size)
  
   if(argint(n, &i) < 0)
     return -1;
-// changed cs153 lab 2 (TODO 3)
+//cs 153 lab 2 (TODO 3)
 // if(size < 0 || (uint)i >= curproc->sz || (uint)i+size > curproc->sz)
   if(size < 0)
     return -1;

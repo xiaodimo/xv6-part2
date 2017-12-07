@@ -319,7 +319,7 @@ clearpteu(pde_t *pgdir, char *uva)
 pde_t*
 copyuvm(pde_t *pgdir, uint sz)
 {
-  //changed cs 153 lab 2
+  //cs 153 lab 2
   //cprintf("\n\n//////////////////////////////////////////////////\n");
   //cprintf("Enter copyuvm() in vm.c...\n\n");
 
@@ -360,7 +360,7 @@ copyuvm(pde_t *pgdir, uint sz)
 
 
   ///////////////////////////////
-  // changed cs153 lab 2 (TODO 4)
+  //cs 153 lab 2 (TODO 4)
 
   //cprintf("i: %d\n", i);
   //cprintf("STACKBASE: %d\n", STACKBASE);  

@@ -11,7 +11,7 @@ int
 exec(char *path, char **argv)
 {
 
-  //changed cs 153 lab 2 part 1 (for debugging only)
+  //cs 153 lab 2 part 1 (for debugging only)
   //cprintf("\n\n//////////////////////////////////////////////////\n");
   //cprintf("Enter exec() in exec.c...\n\n");
 
@@ -83,7 +83,7 @@ exec(char *path, char **argv)
 */
 
   /////////////////////////
-  // changed for cs153 lab2
+  //cs 153 lab2
   
   sp = 0;
   
@@ -105,7 +105,7 @@ exec(char *path, char **argv)
 
 
   ///////////////////////
-  // changed cs 153 lab 2
+  //cs 153 lab 2
   //cprintf("\n\nafter allocuvm for sz, before sp assignment...\n");
   //cprintf("sz: %d\n", sz);
   ///cprintf("sp: %d\n", sp);
@@ -123,7 +123,7 @@ exec(char *path, char **argv)
     goto bad;
  
 
-  // changed cs153 lab 2
+  //cs 153 lab 2
   curproc->numStackPages = 1; // says we created a page for the stack
 
   //cprintf("\n\nafter allocuvm for sp and curproc->numStackPages...\n");
@@ -160,7 +160,7 @@ exec(char *path, char **argv)
 
 
   ///////////////////////
-  // changed cs 153 lab 2 (for debugging only)
+  //cs 153 lab 2 (for debugging only)
   //cprintf("\n\nsz: %d\n", sz);
   //cprintf("sp: %d\n\n", sp);
 
