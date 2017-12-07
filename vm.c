@@ -36,10 +36,6 @@ static pte_t *
 walkpgdir(pde_t *pgdir, const void *va, int alloc)
 {
 
-  //changed cs 153 lab 2
-  //cprintf("\n\n//////////////////////////////////////////////////\n");
-  //cprintf("Enter walkpgdir() in vm.c...\n\n");
-
   pde_t *pde;
   pte_t *pgtab;
 
@@ -65,9 +61,6 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
 int
 mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
 {
-  //changed cs 153 lab 2
-  //cprintf("\n\n//////////////////////////////////////////////////\n");
-  //cprintf("Enter mappages() in vm.c...\n\n");
 
   char *a, *last;
   pte_t *pte;
@@ -230,9 +223,6 @@ loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
 int
 allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
-  //changed cs 153 lab 2
-  //cprintf("\n\n//////////////////////////////////////////////////\n");
-  //cprintf("Enter allocuvm() in vm.c...\n\n");
 
   char *mem;
   uint a;
@@ -268,9 +258,6 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 int
 deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
-  //changed cs 153 lab 2
-  //cprintf("\n\n//////////////////////////////////////////////////\n");
-  //cprintf("Enter deallocuvm() in vm.c...\n\n");
 
   pte_t *pte;
   uint a, pa;

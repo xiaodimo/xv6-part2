@@ -11,7 +11,7 @@ int
 exec(char *path, char **argv)
 {
 
-  //changed cs 153 lab 2
+  //changed cs 153 lab 2 part 1 (for debugging only)
   //cprintf("\n\n//////////////////////////////////////////////////\n");
   //cprintf("Enter exec() in exec.c...\n\n");
 
@@ -143,7 +143,7 @@ exec(char *path, char **argv)
   }
   ustack[3+argc] = 0;
 
-  // ****************************************** CHECK BELOW CODE ******************** //
+
   ustack[0] = 0xffffffff;  // fake return PC
   ustack[1] = argc;
   ustack[2] = sp - (argc+1)*4;  // argv pointer
@@ -160,7 +160,7 @@ exec(char *path, char **argv)
 
 
   ///////////////////////
-  // changed cs 153 lab 2
+  // changed cs 153 lab 2 (for debugging only)
   //cprintf("\n\nsz: %d\n", sz);
   //cprintf("sp: %d\n\n", sp);
 
