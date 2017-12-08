@@ -120,7 +120,7 @@ trap(struct trapframe *tf)
     //cprintf("myproc()->pgdir: %d\n", myproc()->pgdir);
     
     
-    if(rcr2() < sp) {
+    if( (rcr2() < sp) && (rcr2() > (sp-PGSIZE) ) ) {
       if((allocuvm(myproc()->pgdir, sp - PGSIZE, sp)) == 0) {
         cprintf("\n\nno more memory to allocate, exiting program...\n\n");
         exit();

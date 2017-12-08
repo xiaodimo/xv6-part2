@@ -236,7 +236,16 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   for(; a < newsz; a += PGSIZE){
     mem = kalloc();
     if(mem == 0){
+
+      //cs 153 lab 2
+      // below prints the address of the bottom of the stack along
+      // with the top of the user space to see if the stack has
+      // grown into the heap, which should be at the top of the
+      // user space and tracked by myproc()->sz
       cprintf("\nallocuvm out of memory\n");
+      cprintf("\n\nAddress of Stack: %x\n", myproc()->tf->esp);
+      cprintf("Address of user space: %x\n", myproc()->sz);
+      cprintf("Address of user space (plus guard): %x\n\n", myproc()->sz+PGSIZE);
       deallocuvm(pgdir, newsz, oldsz);
       return 0;
     }
